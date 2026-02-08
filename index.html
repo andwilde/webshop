@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tea&Candles</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      background: #faf7f2;
+      color: #333;
+    }
+    header {
+      background: #5b4636;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      background: #e6dccf;
+      padding: 0.75rem;
+    }
+    nav a {
+      text-decoration: none;
+      color: #5b4636;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .hidden { display: none; }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .product {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .product h3 {
+      margin-top: 0;
+    }
+    button {
+      background: #5b4636;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #463527;
+    }
+    .cart {
+      margin-top: 2rem;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Tea&Candles</h1>
+  <p>Moments of calm – brewed and lit</p>
+</header>
+
+<nav>
+  <a onclick="showSection('home')">Home</a>
+  <a onclick="showSection('shop')">Webshop</a>
+</nav>
+
+<main>
+  <!-- Home Section -->
+  <section id="home">
+    <h2>Welcome to Tea&Candles</h2>
+    <p>
+      Tea&Candles is a small lifestyle brand dedicated to creating cozy moments.
+      We carefully select fine teas and craft scented candles inspired by tea aromas.
+    </p>
+    <p>
+      Whether you’re winding down after a long day or sharing a quiet moment with friends,
+      our products are designed to slow things down and bring warmth into your home.
+    </p>
+  </section>
+
+  <!-- Shop Section -->
+  <section id="shop" class="hidden">
+    <h2>Webshop</h2>
+    <div class="products" id="productList"></div>
+
+    <div class="cart" id="cart">
+      <h3>Your Cart</h3>
+      <ul id="cartItems"></ul>
+      <p><strong>Total:</strong> €<span id="total">0.00</span></p>
+      <button onclick="checkout()">Checkout</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2026 Tea&Candles – Demo webshop (no real orders)
+</footer>
+
+<script>
+  const products = [
+    { id: 1, name: "Earl Grey Tea", price: 6.5 },
+    { id: 2, name: "Green Jasmine Tea", price: 7.0 },
+    { id: 3, name: "Black Tea Candle", price: 12.0 },
+    { id: 4, name: "Vanilla Chai Candle", price: 14.5 }
+  ];
+
+  const cart = [];
+
+  function showSection(section) {
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('shop').classList.add('hidden');
+    document.getElementById(section).classList.remove('hidden');
+  }
+
+  function renderProducts() {
+    const list = document.getElementById('productList');
+    list.innerHTML = '';
+    products.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `
+        <h3>${p.name}</h3>
+        <p>Price: €${p.price.toFixed(2)}</p>
+        <button onclick="addToCart(${p.id})">Add to cart</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    cart.push(product);
+    renderCart();
+  }
+
+  function renderCart() {
+    const items = document.getElementById('cartItems');
+    items.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(item => {
+      total += item.price;
+      const li = document.createElement('li');
+      li.textContent = `${item.name} – €${item.price.toFixed(2)}`;
+      items.appendChild(li);
+    });
+
+    document.getElementById('total').textContent = total.toFixed(2);
+  }
+
+  function checkout() {
+    if (cart.length === 0) {
+      alert('Your cart is empty.');
+      return;
+    }
+    alert('Thank you for your order! (This is a demo – no real purchase was made.)');
+    cart.length = 0;
+    renderCart();
+  }
+
+  renderProducts();
+</script>
+
+</body>
+</html>
